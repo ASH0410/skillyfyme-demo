@@ -7,12 +7,16 @@ pipeline{
         stage('Parallel Stage Run'){
             parallel {
                 stage('Compile the code'){
-                    git 'https://github.com/Sonal0409/DevOpsCodeDemo.git'
-                    sh 'mvn compile'
+                    step{
+                        git 'https://github.com/Sonal0409/DevOpsCodeDemo.git'
+                        sh 'mvn compile'
+                    }
                 }
                 stage('Review the code'){
-                    git 'https://github.com/Sonal0409/DevOpsCodeDemo.git'
-                    sh 'mvn pmd:pmd'
+                    step{
+                        git 'https://github.com/Sonal0409/DevOpsCodeDemo.git'
+                        sh 'mvn pmd:pmd'
+                    }
                 }
             }
         }
