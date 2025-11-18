@@ -1,0 +1,62 @@
+pipeline{
+    agent any
+    tools{
+        maven 'mymaven' // Ensure 'mymaven' tool is configured in Jenkins global settings
+    }
+    stages{
+        stage('Build'){
+            steps{
+                script{
+                    int maxretries = 3
+                    int retries = 0
+                    boolean success = false // Use boolean for clarity, int/def is also fine
+
+                    while (retries < maxretries && !success){
+                        try {
+                            // The command syntax itself is correct Groovy 'sh' step
+                            sh 'mvn compile' 
+                            echo "Command succeeded on attempt ${retries + 1}."
+                            success = true
+                            // 'break' is optional here because 'success = true' handles the exit condition
+                        }
+                        catch(Exception e){ // Catch the general Exception
+                            retries++
+                            echo "mvn compile is failing (Attempt ${retries} of ${maxretries})."
+                            
+                            // Optional: If all retries fail, you might want to force the build to fail here
+                            if (retries >= maxretries) {
+                                error("Maven compilation failed after ${maxretries} attempts.")
+                            }
+                        }                      
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+// pipeline{
+//     agent any
+//     tools{
+//         maven 'mymaven'
+//     }
+
+//     stages{
+//         stage('Build'){
+//             steps{
+//                 script{
+//                     try {
+//                         retry(3){
+//                         sh 'mvn compile'
+//                         }
+//                     }
+//                     catch(e){
+//                         echo "maven compile is failing"
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
+
