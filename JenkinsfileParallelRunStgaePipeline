@@ -14,7 +14,6 @@ pipeline{
                     }
                 stage('Review the code'){
                         steps{
-                            git 'https://github.com/Sonal0409/DevOpsCodeDemo.git'
                             sh 'mvn pmd:pmd'
                         }
                     }
